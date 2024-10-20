@@ -1,4 +1,4 @@
-function Validate-APIoAuth2Token {
+function Confirm-APIoAuth2Token {
     [CmdletBinding()]
     param (
         
@@ -9,7 +9,7 @@ function Validate-APIoAuth2Token {
     }
     
     process {
-        if ($Global:oAuth2TokenInformation -eq $null -or (Get-Date) -ge $Global:oAuth2TokenInformation.ExpiresAt) {
+        if ([string]::IsNullOrEmpty($Global:oAuth2TokenInformation) -or (Get-Date) -ge $Global:oAuth2TokenInformation.ExpiresAt) {
             
             Get-oAuth2APIAccessToken -RefreshToken $Global:oAuth2TokenInformation.refresh_token
         }
