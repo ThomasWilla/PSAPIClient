@@ -21,10 +21,10 @@ function Get-APIoAuth2AccessToken {
         try {
             #check Powershell Version
             if ($psversiontable.PSVersion.Major -gt 5){
-                $response = Invoke-RestMethod -Uri $Global:APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded"
+                $response = Invoke-RestMethod -Uri $Global:oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded"
             }
             else {
-                $response = Invoke-RestMethod -Uri $Global:APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -UseBasicParsing
+                $response = Invoke-RestMethod -Uri $Global:oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -UseBasicParsing
             }            
             $Global:oAuth2TokenInformation = @{
                 AccessToken  = $response.access_token

@@ -1,4 +1,4 @@
-function Invoke-ClientRquest {
+function Invoke-APIClientRquest {
     [CmdletBinding()]
     param (
         # Der API-Endpunkt
@@ -11,8 +11,8 @@ function Invoke-ClientRquest {
         $Method = 'GET',
         # Optionaler Body für POST/PUT
         [Parameter(Mandatory = $false)]
-        [string]
-        $Body = $null
+        [hashtable]
+        $Body = @{}
     )
     
     begin {
@@ -21,14 +21,19 @@ function Invoke-ClientRquest {
     
     process {
 
-        Validate-APIoAuth2Token
+        Confirm-APIoAuth2Token
 
         try {
             $header = @{
-                Authorization = "$($Global:oAuth2TokenInformation.TokenType) $($Global:oAuth2TokenInformation.access_token)"
+                Authorization = "$($Global:oAuth2TokenInformation.TokenType) $($Global:oAuth2TokenInformation.AccessToken)"
             }
-
-            $response = Invoke-RestMethod -Uri "$($Global:oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json"
+            #check Powershell Version
+            if ($psversiontable.PSVersion.Major -gt 5){
+                $response = Invoke-RestMethod -Uri "$($Global:oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json"
+            }
+            else {
+                $response = Invoke-RestMethod -Uri "$($Global:oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json" -UseBasicParsing
+            }
         }
         catch {
             Write-Error "Fehler beim API Aufruf: $_"
