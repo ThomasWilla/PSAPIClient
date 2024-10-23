@@ -2,7 +2,7 @@
 
 This Powershell module is a wrapper for the use of one or more API(s). Each API can be configured and addressed independently. This allows easy use of multiple APIs within a session.
 
-## Current support :
+## Current support
 - Dynamic selection of initialized APIs
 - oAuth2 (incl. automatic refresh when the token expires)
 
@@ -39,5 +39,19 @@ Invoke-APIClientRquest -SelectRunningInstance SELECT_YOUR_INSTANCE -Method GET/P
 ```
 
 **Get any Session, Token and API Information from the API Instance**
-
+```
 Get-APIoAuth2SessionInformation -SelectRunningInstance SELECT_YOUR_INSTANCE 
+```
+
+## Changelog
+23.10.2024: oAuth2 Integration
+
+## Authors
+
+* **Thomas Willa** - *Initial work* - [ThomasWilla](https://github.com/ThomasWilla)
+
+See also the list of [contributors](https://github.com/ThomasWilla/PSHardwareMonitoring/graphs/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
