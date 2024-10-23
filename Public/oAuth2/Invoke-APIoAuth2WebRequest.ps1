@@ -1,11 +1,20 @@
-function Get-APIoAuth2AccessToken {
+function Invoke-APIoAuth2WebRequest {
     [CmdletBinding()]
     param (
-        # Parameter help description
+        # Der API-Endpunkt
         [Parameter(Mandatory = $true)]
         [string]
-        $RefreshToken
+        $ResourcePath,
+        # Standardmethode GET
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Method = 'GET',
+        # Optionaler Body für POST/PUT
+        [Parameter(Mandatory = $false)]
+        [hashtable]
+        $Body = @{}
     )
+    
     DynamicParam {
         # ArrayList mit erlaubten Werten für das ValidateSet
         $validateList = get-APIRunningInstanceOAuth2
@@ -16,7 +25,7 @@ function Get-APIoAuth2AccessToken {
         # Erstellen des Parameter-Attributes inklusive ValidateSet
         $attributes = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $paramAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $paramAttribute.Mandatory = $true
+        $paramAttribute.Mandatory = $false
         $paramAttribute.ParameterSetName = "select_one"
         $attributes.Add($paramAttribute)
     
@@ -39,43 +48,35 @@ function Get-APIoAuth2AccessToken {
     
     
     begin {
-        
         $instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance'])
-        $APICLIENT = get-APIInstanceObjectOAuth2 -instance $Instance
-
-        $body = @{
-            grant_type    = "refresh_token"
-            refresh_token = $RefreshToken
-            client_id     = $APICLIENT.oAutth2APIConfig.ClientId
-            client_secret = $APICLIENT.oAutth2APIConfig.ClientSecret
-        }
+        $APICLIENT = get-APIInstanceObjectOAuth2 -instance $instance
     }
     
     process {
 
+        Confirm-APIoAuth2Token
+
         try {
+            $header = @{
+                Authorization = "$($APICLIENT.oAuth2TokenInformation.TokenType) $($APICLIENT.oAuth2TokenInformation.AccessToken)"
+            }
             #check Powershell Version
-            if ($psversiontable.PSVersion.Major -gt 5) {
-                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded"
+            if ($APICLIENT.SessionInformation.PSMajorVersion -gt 5){
+                $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json"
             }
             else {
-                $script:oAutth2APIConfig 
-                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -UseBasicParsing
-            }            
-            $APICLIENT.oAuth2TokenInformation = @{
-                AccessToken  = $response.access_token
-                RefreshToken = $response.refresh_token
-                TokenType    = $response.token_type
-                ExpiresAt    = (Get-Date).AddSeconds($response.expires_in)
+                $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json" -UseBasicParsing
             }
         }
         catch {
-            Write-Error "Fehler beim Abrufen des Tokens: $_" 
+            Write-Error "Fehler beim API Aufruf: $_"
+            $response = $_
         }
+        
         
     }
     
     end {
-        
+        return $response
     }
 }

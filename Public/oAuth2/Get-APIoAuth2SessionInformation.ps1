@@ -1,11 +1,9 @@
-function Get-APIoAuth2AccessToken {
+function Get-APIoAuth2SessionInformation {
     [CmdletBinding()]
     param (
-        # Parameter help description
-        [Parameter(Mandatory = $true)]
-        [string]
-        $RefreshToken
+
     )
+
     DynamicParam {
         # ArrayList mit erlaubten Werten für das ValidateSet
         $validateList = get-APIRunningInstanceOAuth2
@@ -39,43 +37,24 @@ function Get-APIoAuth2AccessToken {
     
     
     begin {
-        
-        $instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance'])
-        $APICLIENT = get-APIInstanceObjectOAuth2 -instance $Instance
 
-        $body = @{
-            grant_type    = "refresh_token"
-            refresh_token = $RefreshToken
-            client_id     = $APICLIENT.oAutth2APIConfig.ClientId
-            client_secret = $APICLIENT.oAutth2APIConfig.ClientSecret
+        $instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance'])
+
+        $APICLIENT = get-APIInstanceObjectOAuth2 -instance $instance
+        $result = [PSCustomObject]@{
+            oAutth2APIConfig = $APICLIENT.oAutth2APIConfig
+            oAuth2TokenInformation = $APICLIENT.oAuth2TokenInformation
+            SessionInformation = $APICLIENT.SessionInformation
         }
+        
+        
     }
     
     process {
-
-        try {
-            #check Powershell Version
-            if ($psversiontable.PSVersion.Major -gt 5) {
-                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded"
-            }
-            else {
-                $script:oAutth2APIConfig 
-                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -UseBasicParsing
-            }            
-            $APICLIENT.oAuth2TokenInformation = @{
-                AccessToken  = $response.access_token
-                RefreshToken = $response.refresh_token
-                TokenType    = $response.token_type
-                ExpiresAt    = (Get-Date).AddSeconds($response.expires_in)
-            }
-        }
-        catch {
-            Write-Error "Fehler beim Abrufen des Tokens: $_" 
-        }
         
     }
     
     end {
-        
+        return $Result
     }
 }
