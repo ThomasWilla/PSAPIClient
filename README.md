@@ -6,7 +6,7 @@ This Powershell module is a wrapper for the use of one or more API(s). Each API 
 - Dynamic selection of initialized APIs
 - oAuth2 (incl. automatic refresh when the token expires)
 
-## Planned extension
+## Planned extension (when i need)
 - Basic Auth
 - Proxy Function
 - Logging
