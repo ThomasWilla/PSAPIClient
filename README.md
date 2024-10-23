@@ -11,7 +11,7 @@ This Powershell module is a wrapper for the use of one or more API(s). Each API 
 - Proxy Function
 - Logging
 
-## Use this Module
+# Use this Module
 
 **Download this Module**
 ```
