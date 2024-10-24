@@ -19,7 +19,16 @@ function Set-APIoAuth2Configuration {
         $APIEndpoint,
         [Parameter(ParameterSetName = "create_new")]
         [string]
-        $InstanceName = $null
+        $InstanceName = $null,
+        # Proxy Server
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Proxy,
+        # USer Proxy Credentinals
+        [Parameter(Mandatory=$false)]
+        [bool]
+        $ProxyUseDefaultCredentials
+
     )
         
     DynamicParam {
@@ -57,18 +66,15 @@ function Set-APIoAuth2Configuration {
     begin {
 
         switch ($PSCmdlet.ParameterSetName) {
-            "select_one" { $Instance =  $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance']);break }
+            "select_one" { $Instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance']); break }
             "create_new" { $Instance = "PSAPIClient_${InstanceName}"; break }
-            Default { $Instance = "PSAPIClient_DEFAULT"}
+            Default { $Instance = "PSAPIClient_DEFAULT" }
         }
         
         #set Instance Variable Name with PSAPI-Prefix
-      
-
-        Write-Host $Instance
+        Write-Host "$($Instance) created"
 
         # Check if exsits the Instance Session Variable
-
         try {
             Get-Variable -Scope global -name PSAPIClient_AvailablieInstanceOAUT2 -ErrorAction Stop
         }
@@ -87,15 +93,17 @@ function Set-APIoAuth2Configuration {
             $APICLIENT.SessionInformation.APIClientInstanceName = $Instance
             $AddInstance = [pscustomobject]@{
                 InstanceName   = ${Instance}
-                InstanceObject = $APICLIENT 
-
-
+                InstanceObject = $APICLIENT
+                
             }
 
             $global:PSAPIClient_AvailablieInstanceOAUT2.add($AddInstance) | Out-Null
         }
         
         $APICLIENT = get-APIInstanceObjectOAuth2 -instance $Instance
+
+        # Set Proxy
+        $APICLIENT.SetAPIoAuthProxy($Proxy, $ProxyUseDefaultCredentials)
 
         #Set Session Information
         $APICLIENT.SetAPIoAuth2Configuration($ClientID, $ClientSecret, $TokenEndpoint, $APIEndpoint)

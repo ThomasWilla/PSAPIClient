@@ -62,10 +62,10 @@ function Invoke-APIoAuth2WebRequest {
             }
             #check Powershell Version
             if ($APICLIENT.SessionInformation.PSMajorVersion -gt 5){
-                $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json"
+                $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json"  -Proxy $APICLIENT.SessionInformation.ProxyURL
             }
             else {
-                $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json" -UseBasicParsing
+                $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json" -UseBasicParsing  -Proxy $APICLIENT.SessionInformation.ProxyURL
             }
         }
         catch {
