@@ -57,10 +57,10 @@ function Get-APIoAuth2AccessToken {
         try {
             #check Powershell Version
             if ($APICLIENT.SessionInformation.PSMajorVersion  -gt 5) {
-                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -Proxy $APICLIENT.SessionInformation.ProxyURL -UseDefaultCredentials:$APICLIENT.SessionInformation.ProxyUseDefaultCredentials
+                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -Proxy $APICLIENT.SessionInformation.ProxyURL -ProxyUseDefaultCredentials:$APICLIENT.SessionInformation.ProxyUseDefaultCredentials
             }
             else {
-                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -UseBasicParsing  -Proxy $APICLIENT.SessionInformation.ProxyURL  -UseDefaultCredentials:$APICLIENT.SessionInformation.ProxyUseDefaultCredentials
+                $response = Invoke-RestMethod -Uri $APICLIENT.oAutth2APIConfig.TokenEndpoint -Method Post -Body $body -ContentType "application/x-www-form-urlencoded" -UseBasicParsing  -Proxy $APICLIENT.SessionInformation.ProxyURL  -ProxyUseDefaultCredentials:$APICLIENT.SessionInformation.ProxyUseDefaultCredentials
             }            
             $APICLIENT.oAuth2TokenInformation = @{
                 AccessToken  = $response.access_token

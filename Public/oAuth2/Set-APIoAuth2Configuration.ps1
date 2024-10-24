@@ -17,17 +17,17 @@ function Set-APIoAuth2Configuration {
         [Parameter(Mandatory = $false)]
         [string]
         $APIEndpoint,
-        [Parameter(ParameterSetName = "create_new")]
-        [string]
-        $InstanceName = $null,
         # Proxy Server
         [Parameter(Mandatory = $false)]
         [string]
         $Proxy,
         # USer Proxy Credentinals
-        [Parameter(Mandatory=$false)]
-        [bool]
-        $ProxyUseDefaultCredentials
+        [Parameter(Mandatory = $false)]
+        [switch]
+        $ProxyUseDefaultCredentials,
+        [Parameter(ParameterSetName = "create_new")]
+        [string]
+        $InstanceName = $null
 
     )
         
@@ -41,7 +41,7 @@ function Set-APIoAuth2Configuration {
         # Erstellen des Parameter-Attributes inklusive ValidateSet
         $attributes = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $paramAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $paramAttribute.Mandatory = $false
+        $paramAttribute.Mandatory = $true
         $paramAttribute.ParameterSetName = "select_one"
         $attributes.Add($paramAttribute)
     
@@ -61,7 +61,6 @@ function Set-APIoAuth2Configuration {
     
         return $paramDictionary
     }#End Dynamic Parameter
-    
     
     begin {
 
