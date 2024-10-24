@@ -35,7 +35,7 @@ Get-APIoAuth2AccessToken -SelectRunningInstance SELECT_YOUR_INSTANCE -RefreshTok
 
 **Invoke Rest Call to the API Instance**
 ```
-Invoke-APIClientRquest -SelectRunningInstance SELECT_YOUR_INSTANCE -Method GET/POST/PUT -ResourcePath "api/v2/anyressource" -Body YOUR_CUSTOM_BODY_WHEN_REQUIRED
+Invoke-APIoAuth2WebRequest -SelectRunningInstance SELECT_YOUR_INSTANCE -Method GET/POST/PUT -ResourcePath "api/v2/anyressource" -Body YOUR_CUSTOM_BODY_WHEN_REQUIRED
 ```
 
 **Get any Session, Token and API Information from the API Instance**
