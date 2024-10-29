@@ -48,10 +48,8 @@ Get-APIoAuth2SessionInformation -SelectRunningInstance SELECT_YOUR_INSTANCE
 |-------|------------|------------------------------------------|
 |1.0    | 23.10.2024 | *oAuth2 Integration|
 |1.1    | 29.10.2024 | *Porxy Server functionallity|
-=======
-23.10.2024: oAuth2 Integration
-26.10.2024: Proxy function
->>>>>>> 129ae725d92c48e581313c5ddb30c1f56d36dd03
+|-------|------------|------------------------------------------|
+
 
 ## Authors
 
