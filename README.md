@@ -6,7 +6,6 @@ This Powershell module is a wrapper for the use of one or more API(s). Each API 
 - Dynamic selection of initialized APIs
 - oAuth2 (incl. automatic refresh when the token expires)
 - Proxy Function
-  
 ## Planned extension (when i need)
 - Basic Auth
 - Logging
@@ -15,7 +14,7 @@ This Powershell module is a wrapper for the use of one or more API(s). Each API 
 
 **Download this Module**
 ```
-git clone https://github.com/ThomasWilla/PSAPIClient.git
+git clone https://github.com/ThomasWilla/PSAPIClient.git -single-branch
 ```
 
 **Import Module**
@@ -25,7 +24,7 @@ import-module  'PATH TO MODULE\PSAPIClient\PSAPIClient.psd1'
 
 **Initial one ore more API Instance**
 ```
-Set-APIoAuth2Configuration -ClientID YOUR_CLIENT_ID -ClientSecret YOUR_CLIENT_SECRET -TokenEndpoint YOUR_TOKEN_ENDPOINT_URL -APIEndpoint YOUR_API_ENDPOINT_URL -Instance YOUR_INSTANCE_NAME
+Set-APIoAuth2Configuration -ClientID YOUR_CLIENT_ID -ClientSecret YOUR_CLIENT_SECRET -TokenEndpoint YOUR_TOKEN_ENDPOINT_URL -APIEndpoint YOUR_API_ENDPOINT_URL -Instance YOUR_INSTANCE_NAME 
 ```
 
 **Get the Access Token from API Instance**
@@ -44,10 +43,15 @@ Get-APIoAuth2SessionInformation -SelectRunningInstance SELECT_YOUR_INSTANCE
 ```
 
 ## Changelog
+<<<<<<< HEAD
 |Version|Date|Changelog
 |-------|------------|------------------------------------------|
 |1.0    | 23.10.2024 | *oAuth2 Integration|
 |1.1    | 29.10.2024 | *Porxy Server functionallity|
+=======
+23.10.2024: oAuth2 Integration
+26.10.2024: Proxy function
+>>>>>>> 129ae725d92c48e581313c5ddb30c1f56d36dd03
 
 ## Authors
 
