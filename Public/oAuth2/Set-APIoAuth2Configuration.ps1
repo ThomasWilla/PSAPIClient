@@ -17,9 +17,18 @@ function Set-APIoAuth2Configuration {
         [Parameter(Mandatory = $false)]
         [string]
         $APIEndpoint,
+        # Proxy Server
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Proxy,
+        # USer Proxy Credentinals
+        [Parameter(Mandatory = $false)]
+        [switch]
+        $ProxyUseDefaultCredentials,
         [Parameter(ParameterSetName = "create_new")]
         [string]
         $InstanceName = $null
+
     )
         
     DynamicParam {
@@ -32,7 +41,7 @@ function Set-APIoAuth2Configuration {
         # Erstellen des Parameter-Attributes inklusive ValidateSet
         $attributes = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $paramAttribute = New-Object System.Management.Automation.ParameterAttribute
-        $paramAttribute.Mandatory = $false
+        $paramAttribute.Mandatory = $true
         $paramAttribute.ParameterSetName = "select_one"
         $attributes.Add($paramAttribute)
     
@@ -53,22 +62,18 @@ function Set-APIoAuth2Configuration {
         return $paramDictionary
     }#End Dynamic Parameter
     
-    
     begin {
 
         switch ($PSCmdlet.ParameterSetName) {
-            "select_one" { $Instance =  $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance']);break }
+            "select_one" { $Instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance']); break }
             "create_new" { $Instance = "PSAPIClient_${InstanceName}"; break }
-            Default { $Instance = "PSAPIClient_DEFAULT"}
+            Default { $Instance = "PSAPIClient_DEFAULT" }
         }
         
         #set Instance Variable Name with PSAPI-Prefix
-      
-
-        Write-Host $Instance
+        Write-Host "$($Instance) created"
 
         # Check if exsits the Instance Session Variable
-
         try {
             Get-Variable -Scope global -name PSAPIClient_AvailablieInstanceOAUT2 -ErrorAction Stop
         }
@@ -87,15 +92,17 @@ function Set-APIoAuth2Configuration {
             $APICLIENT.SessionInformation.APIClientInstanceName = $Instance
             $AddInstance = [pscustomobject]@{
                 InstanceName   = ${Instance}
-                InstanceObject = $APICLIENT 
-
-
+                InstanceObject = $APICLIENT
+                
             }
 
             $global:PSAPIClient_AvailablieInstanceOAUT2.add($AddInstance) | Out-Null
         }
         
         $APICLIENT = get-APIInstanceObjectOAuth2 -instance $Instance
+
+        # Set Proxy
+        $APICLIENT.SetAPIoAuthProxy($Proxy, $ProxyUseDefaultCredentials)
 
         #Set Session Information
         $APICLIENT.SetAPIoAuth2Configuration($ClientID, $ClientSecret, $TokenEndpoint, $APIEndpoint)

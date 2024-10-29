@@ -16,8 +16,10 @@ class APIClientOAuth2 {
     }
 
     [hashtable]$SessionInformation = @{
-        PSMajorVersion = ''
+        PSMajorVersion        = ''
         APIClientInstanceName = ''
+        ProxyURL              = ''
+        ProxyUseDefaultCredentials = ''
     }
 
     #Constructor
@@ -26,6 +28,25 @@ class APIClientOAuth2 {
     }
     
     #Methods
+
+    [void]SetAPIoAuthProxy(
+        [string]$Proxy, 
+        [bool]$ProxyUseDefaultCredentials) {
+        
+            if([string]::IsNullOrEmpty($ProxyUseDefaultCredentials)){
+                $ProxyUseDefaultCredentials = $false
+            }
+
+
+        if ([string]::IsNullOrEmpty($Proxy)) {
+            $this.SessionInformation.ProxyURL = $null
+            $this.SessionInformation.ProxyUseDefaultCredentials  = $ProxyUseDefaultCredentials
+        }
+        else {
+            $this.SessionInformation.ProxyURL = $Proxy
+            $this.SessionInformation.ProxyUseDefaultCredentials = $ProxyUseDefaultCredentials
+        }
+    }#End SetAPIoAuthProxy
 
     [void]SetAPIoAuth2Configuration(
         [string]$ClientID,
@@ -42,7 +63,6 @@ class APIClientOAuth2 {
         }
 
     }#end SetAPIoAuth2Configuration
-
 
     [void] GetAPIoAuth2AccessToken(
         [string]$RefreshToken
@@ -90,8 +110,7 @@ class APIClientOAuth2 {
             Get-APIoAuth2AccessToken -RefreshToken $this.oAuth2TokenInformation.RefreshToken
         }
 
-    }
-
+    }#End ConfirmAPIoAuth2Token
 
     [PSCustomObject]InvokeAPIClientRquest(
         [string]$ResourcePath,
@@ -118,7 +137,7 @@ class APIClientOAuth2 {
 
         return $response
 
-    }
+    }#End InvokeAPIClientRquest
 
 
 }#end class
