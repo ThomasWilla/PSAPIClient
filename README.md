@@ -5,10 +5,10 @@ This Powershell module is a wrapper for the use of one or more API(s). Each API 
 ## Current support
 - Dynamic selection of initialized APIs
 - oAuth2 (incl. automatic refresh when the token expires)
-
+- Proxy Function
+  
 ## Planned extension (when i need)
 - Basic Auth
-- Proxy Function
 - Logging
 
 # Use this Module
@@ -44,7 +44,10 @@ Get-APIoAuth2SessionInformation -SelectRunningInstance SELECT_YOUR_INSTANCE
 ```
 
 ## Changelog
-23.10.2024: oAuth2 Integration
+|Version|Date|Changelog
+|-------|------------|------------------------------------------|
+|1.0    | 23.10.2024 | *oAuth2 Integration|
+|1.1    | 29.10.2024 | *Porxy Server functionallity|
 
 ## Authors
 
