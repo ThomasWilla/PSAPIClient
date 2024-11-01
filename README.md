@@ -12,6 +12,11 @@ This Powershell module is a wrapper for the use of one or more API(s). Each API 
 
 # Use this Module
 
+**Insall this Module**
+```
+Install-Module -Name PSAPIClient
+```
+
 **Download this Module**
 ```
 git clone https://github.com/ThomasWilla/PSAPIClient.git -single-branch
