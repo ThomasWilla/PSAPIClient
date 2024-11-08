@@ -53,6 +53,7 @@ Get-APIoAuth2SessionInformation -SelectRunningInstance SELECT_YOUR_INSTANCE
 |-------|------------|------------------------------------------|
 | 1.0   | 23.10.2024 | - oAuth2 Integration|
 | 1.1   | 29.10.2024 | - Porxy Server functionallity|
+| 1.2   | 29.10.2024 | - Extension for user-defined settings in the header for Invoke-APIOAuth2WebRequest (-AddCustomHeaderSettings [Hashtable]) 
 
 
 

@@ -12,7 +12,11 @@ function Invoke-APIoAuth2WebRequest {
         # Optionaler Body für POST/PUT
         [Parameter(Mandatory = $false)]
         [hashtable]
-        $Body = @{}
+        $Body = @{},
+        # Add Custom Setting to Header
+        [Parameter(Mandatory = $false)]
+        [hashtable]
+        $AddCustomHeaderSettings
     )
     
     DynamicParam {
@@ -60,8 +64,13 @@ function Invoke-APIoAuth2WebRequest {
             $header = @{
                 Authorization = "$($APICLIENT.oAuth2TokenInformation.TokenType) $($APICLIENT.oAuth2TokenInformation.AccessToken)"
             }
+            #check if we have custom Header Settings
+            if ($AddCustomHeaderSettings.Count -gt 0) {
+                $header += $AddCustomHeaderSettings
+            }            
+
             #check Powershell Version
-            if ($APICLIENT.SessionInformation.PSMajorVersion -gt 5){
+            if ($APICLIENT.SessionInformation.PSMajorVersion -gt 5) {
                 $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json"  -Proxy $APICLIENT.SessionInformation.ProxyURL -ProxyUseDefaultCredentials:$APICLIENT.SessionInformation.ProxyUseDefaultCredentials
             }
             else {
