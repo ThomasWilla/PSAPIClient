@@ -12,7 +12,7 @@
 RootModule = 'PSAPIClient.psm1'
 
 # Die Versionsnummer dieses Moduls
-ModuleVersion = '1.1.0'
+ModuleVersion = '1.1.1'
 
 # Unterst�tzte PSEditions
 CompatiblePSEditions = 'Desktop', 'Core'
