@@ -9,10 +9,10 @@ function Invoke-APIoAuth2WebRequest {
         [Parameter(Mandatory = $false)]
         [string]
         $Method = 'GET',
-        # Optionaler Body für POST/PUT
+        # Optionaler Body für POST/PUT in JSON format
         [Parameter(Mandatory = $false)]
-        [hashtable]
-        $Body = @{},
+        [string]
+        $Body,
         # Add Custom Setting to Header
         [Parameter(Mandatory = $false)]
         [hashtable]
@@ -52,6 +52,16 @@ function Invoke-APIoAuth2WebRequest {
     
     
     begin {
+        #Check JSON
+        # Prüfen, ob der Parameter ein gültiger JSON-String ist
+        try {
+            $body | ConvertFrom-Json -ErrorAction Stop
+            Write-Verbose "The body JSON string is valid”
+        }
+        catch {
+            Write-Error "The specified body parameter is not a valid JSON string"
+        }
+
         $instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance'])
         $APICLIENT = get-APIInstanceObjectOAuth2 -instance $instance
     }
