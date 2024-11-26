@@ -6,13 +6,17 @@ function Invoke-APIoAuth2WebRequest {
         [string]
         $ResourcePath,
         # Standardmethode GET
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true)]
+        [ValidateSet("Get", "Post", "Put", "Delete")]
         [string]
-        $Method = 'GET',
+        $Method,
         # Optionaler Body für POST/PUT in JSON format
         [Parameter(Mandatory = $false)]
-        [string]
+        [hashtable]
         $Body,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $BodyAsJson,
         # Add Custom Setting to Header
         [Parameter(Mandatory = $false)]
         [hashtable]
@@ -52,18 +56,13 @@ function Invoke-APIoAuth2WebRequest {
     
     
     begin {
-        #Check JSON
-        # Prüfen, ob der Parameter ein gültiger JSON-String ist
-        try {
-            $body | ConvertFrom-Json -ErrorAction Stop
-            Write-Verbose "The body JSON string is valid”
-        }
-        catch {
-            Write-Error "The specified body parameter is not a valid JSON string"
-        }
-
         $instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance'])
         $APICLIENT = get-APIInstanceObjectOAuth2 -instance $instance
+
+        # Set Body with Custom Json 
+        switch ($PSCmdlet.ParameterSetName) {
+            "body_json" { $body = $BodyAsJson; break }
+        }
     }
     
     process {
@@ -79,20 +78,6 @@ function Invoke-APIoAuth2WebRequest {
                 $header += $AddCustomHeaderSettings
             }
             
-            #cehck if we need to convert body to hastable in case of GET Method https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-7.4#parameters
-            if ($Method -eq "GET" -and ![string]::IsNullOrEmpty($Body)) {
-
-                $BodyAsObject = $Body | ConvertFrom-Json
-
-                Remove-Variable -Name Body
-                $Body = @{}
-
-                foreach ($_BodyAsObject in $BodyAsObject.PSObject.Properties ) {
-                    $Body[$_BodyAsObject.Name] = $_BodyAsObject.value
-                }
-            }
-
-
             #check Powershell Version
             if ($APICLIENT.SessionInformation.PSMajorVersion -gt 5) {
                 
