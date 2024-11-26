@@ -77,10 +77,25 @@ function Invoke-APIoAuth2WebRequest {
             #check if we have custom Header Settings
             if ($AddCustomHeaderSettings.Count -gt 0) {
                 $header += $AddCustomHeaderSettings
-            }            
+            }
+            
+            #cehck if we need to convert body to hastable in case of GET Method https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-7.4#parameters
+            if ($Method -eq "GET" -and ![string]::IsNullOrEmpty($Body)) {
+
+                $BodyAsObject = $Body | ConvertFrom-Json
+
+                Remove-Variable -Name Body
+                $Body = @{}
+
+                foreach ($_BodyAsObject in $BodyAsObject.PSObject.Properties ) {
+                    $Body[$_BodyAsObject.Name] = $_BodyAsObject.value
+                }
+            }
+
 
             #check Powershell Version
             if ($APICLIENT.SessionInformation.PSMajorVersion -gt 5) {
+                
                 $response = Invoke-RestMethod -Uri "$($APICLIENT.oAutth2APIConfig.ApiEndpoint)/$ResourcePath" -Method $Method -Headers $header -Body $Body -ContentType "application/json"  -Proxy $APICLIENT.SessionInformation.ProxyURL -ProxyUseDefaultCredentials:$APICLIENT.SessionInformation.ProxyUseDefaultCredentials
             }
             else {
