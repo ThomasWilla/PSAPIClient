@@ -53,8 +53,9 @@ Get-APIoAuth2SessionInformation -SelectRunningInstance SELECT_YOUR_INSTANCE
 |-------|------------|------------------------------------------|
 | 1.0.0   | 23.10.2024 | - oAuth2 Integration|
 | 1.1.0   | 29.10.2024 | - Porxy Server functionallity|
-| 1.1.1   | 29.10.2024 | - Extension for user-defined settings in the header for Invoke-APIOAuth2WebRequest (-AddCustomHeaderSettings [Hashtable]) 
-| 1.1.3   | 29.10.2024 | - Add Invoke-APIOAuth2WebRequest (-BodyAsJson [sting]) in case of customize format body json (ex. -Detph X -Compress). So you can use (-Body [hastabel]) or (-BodyAsJson [sting])
+| 1.1.1   | 05.11.2024 | - Extension for user-defined settings in the header for Invoke-APIOAuth2WebRequest (-AddCustomHeaderSettings [Hashtable]) 
+| 1.1.2/3 | 25.11.2024 | - Bugfixing 
+| 1.1.4   | 27.11.2024 | - Add Invoke-APIOAuth2WebRequest (-BodyAsJson [sting]) in case of customize format body json (ex. -Detph X -Compress). So you can use (-Body [hastabel]) or (-BodyAsJson [sting])
 
 
 
