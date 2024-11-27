@@ -60,10 +60,12 @@ function Invoke-APIoAuth2WebRequest {
         $APICLIENT = get-APIInstanceObjectOAuth2 -instance $instance
 
         # Set Body with Custom Json 
-        switch ($PSCmdlet.ParameterSetName) {
-            "body_json" { $body = $BodyAsJson; break }
+        if (![string]::IsNullOrEmpty($BodyAsJson)) {
+            Remove-Variable -name Body -Force
+            [string]$body = $BodyAsJson
         }
     }
+
     
     process {
 
