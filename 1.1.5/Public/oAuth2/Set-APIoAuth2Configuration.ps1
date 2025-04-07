@@ -66,7 +66,7 @@ function Set-APIoAuth2Configuration {
 
         switch ($PSCmdlet.ParameterSetName) {
             "select_one" { $Instance = $($PSCmdlet.MyInvocation.BoundParameters['SelectRunningInstance']); break }
-            "create_new" { $Instance = "PSAPIClient_${InstanceName}"; break }
+            "create_new" { $Instance = "${InstanceName}"; break }
             Default { $Instance = "PSAPIClient_DEFAULT" }
         }
         
